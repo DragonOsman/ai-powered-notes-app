@@ -8,35 +8,45 @@ const eslintConfig = defineConfig([
   // Override default ignores of eslint-config-next.
   {
     "rules": {
-      "no-unused-vars": "warn",
-      "no-console": "warn",
-      "comma-dangle": [
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-console": "warn",
+      "@typescript-eslint/comma-dangle": [
         "error",
         "never"
       ],
-      "semi": [
+      "@typescript-eslint/semi": [
         "error",
-        "always"
+        "never"
       ],
-      "quotes": [
+      "@typescript-eslint/quotes": [
         "error",
+        "always",
         "double", {
           "avoidEscape": true,
           "allowTemplateLiterals": true
         }
       ],
-      "yoda": [
+      "@typescript-eslint/yoda": [
         "error",
         "never"
       ],
-      "eqeqeq": [
+      "@typescript-eslint/eqeqeq": [
         "error",
         "always"
       ],
-      "prefer-const": [
+      "@typescript-eslint/prefer-const": [
         "error",
         "always"
-      ]
+      ],
+      "@typescript-eslint/await-thenable": "error",
+      "@typescript-eslint/no-floating-promises": "error",
+      "@typescript-eslint/no-misused-promises": "error",
+      "@typescript-eslint/no-unnecessary-type-assertion": "error",
+      "@typescript-eslint/no-unsafe-assignment": "error",
+      "@typescript-eslint/no-unsafe-return": "error",
+      "@typescript-eslint/no-unsafe-member-access": "error",
+      "@typescript-eslint/no-unsafe-call": "error",
+      "@typescript-eslint/no-explicit-any": "warn"
     }
   },
   globalIgnores([
