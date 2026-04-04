@@ -8,36 +8,8 @@ const eslintConfig = defineConfig([
   // Override default ignores of eslint-config-next.
   {
     "rules": {
+      // TypeScript-specific rules
       "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/no-console": "warn",
-      "@typescript-eslint/comma-dangle": [
-        "error",
-        "never"
-      ],
-      "@typescript-eslint/semi": [
-        "error",
-        "never"
-      ],
-      "@typescript-eslint/quotes": [
-        "error",
-        "always",
-        "double", {
-          "avoidEscape": true,
-          "allowTemplateLiterals": true
-        }
-      ],
-      "@typescript-eslint/yoda": [
-        "error",
-        "never"
-      ],
-      "@typescript-eslint/eqeqeq": [
-        "error",
-        "always"
-      ],
-      "@typescript-eslint/prefer-const": [
-        "error",
-        "always"
-      ],
       "@typescript-eslint/await-thenable": "error",
       "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/no-misused-promises": "error",
@@ -46,7 +18,17 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-unsafe-return": "error",
       "@typescript-eslint/no-unsafe-member-access": "error",
       "@typescript-eslint/no-unsafe-call": "error",
-      "@typescript-eslint/no-explicit-any": "warn"
+      "@typescript-eslint/no-explicit-any": "warn",
+
+      // Style rules
+      "semi": ["error", "always"],
+      "no-extra-semi": "error",
+      "comma-dangle": ["error", "never"],
+      "quotes": ["error", "double", { avoidEscape: true, allowTemplateLiterals: true }],
+      "yoda": ["error", "never"],
+      "eqeqeq": ["error", "always"],
+      "prefer-const": "error",
+      "no-console": "warn"
     }
   },
   globalIgnores([
