@@ -12,6 +12,7 @@ const emailServerHost = process.env.EMAIL_SERVER_HOST || "";
 const emailServerPort = parseInt(process.env.EMAIL_SERVER_PORT || "465");
 const emailFrom = `Osman Zakir <${process.env.EMAIL_FROM || ""}>`;
 const emailServerPassword = process.env.EMAIL_SERVER_PASSWORD || "";
+const baseUrl = process.env.BASE_URL || "http://localhost:3000";
 
 const transporter = nodemailer.createTransport({
   host: emailServerHost,
@@ -24,6 +25,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const auth = betterAuth({
+  baseUrl,
   secret: process.env.BETTER_AUTH_SECRET as string,
   database: mongodbAdapter(adapter.connection.db),
   account: {

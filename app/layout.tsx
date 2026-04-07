@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import './globals.css'
-
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "AI-Powered Notes",
@@ -18,9 +14,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={``}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-bg text-text">
+        <main className="flex-1">{children}</main>
+      </body>
     </html>
   );
 }

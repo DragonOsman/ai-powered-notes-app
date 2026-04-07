@@ -1,8 +1,95 @@
 @import "tailwindcss";
 
+/* LIGHT */
 :root {
-  --background: #37383c;
-  --foreground: #287098;
-  --text: #fff;
+  --bg: #ffffff;
+  --bg-secondary: #f7f7f7;
+
+  --text: #111;
+  --text-muted: #6b7280;
+
+  --border: #e5e7eb;
+
+  /* PRIMARY = slate/gray UI */
+  --primary: #e5e7eb;
+  --primary-foreground: #111;
+
+  /* SECONDARY = your logo blue */
+  --secondary: #287098;
+  --secondary-foreground: #ffffff;
 }
 
+/* DARK */
+.dark {
+  --bg: #37383c;
+  --bg-secondary: #2a2b2f;
+
+  --text: #ffffff;
+  --text-muted: #9ca3af;
+
+  --border: #444;
+
+  /* PRIMARY = gray UI */
+  --primary: #2a2b2f;
+  --primary-foreground: #ffffff;
+
+  /* SECONDARY = blue accent */
+  --secondary: #287098;
+  --secondary-foreground: #ffffff;
+}
+
+@theme {
+  --color-bg: var(--bg);
+  --color-bg-secondary: var(--bg-secondary);
+
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+
+  --color-border: var(--border);
+
+  /* PRIMARY (neutral UI) */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  /* SECONDARY (accent) */
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  /* Primary scale (grays) */
+  --color-primary-100: #f3f4f6;
+  --color-primary-500: #e5e7eb;
+  --color-primary-700: #d1d5db;
+
+  /* Secondary scale (blue) */
+  --color-secondary-50: #e6f0f6;
+  --color-secondary-100: #cce0ec;
+  --color-secondary-500: #287098;
+  --color-secondary-700: #1f5a78;
+}
+
+/* Typography system */
+@layer base {
+  h1 {
+    @apply text-3xl font-semibold tracking-tight text-text;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold tracking-tight text-text;
+  }
+
+  h3 {
+    @apply text-xl font-medium text-text;
+  }
+
+  p {
+    @apply text-base text-text;
+  }
+
+  .text-muted {
+    @apply text-text-muted;
+  }
+
+  .text-small {
+    @apply text-sm text-text-muted;
+  }
+}
