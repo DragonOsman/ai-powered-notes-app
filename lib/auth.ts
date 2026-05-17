@@ -1,18 +1,16 @@
 import { betterAuth } from "better-auth";
+import { connectToDatabase } from "@/lib/db";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { connectToDatabase } from "./db";
 import { magicLink, twoFactor, emailOTP } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 import nodemailer from "nodemailer";
-
-const adapter = await connectToDatabase();
 
 const emailServerUser = process.env.EMAIL_SERVER_USER || "";
 const emailServerHost = process.env.EMAIL_SERVER_HOST || "";
 const emailServerPort = parseInt(process.env.EMAIL_SERVER_PORT || "465");
 const emailFrom = `Osman Zakir <${process.env.EMAIL_FROM || ""}>`;
 const emailServerPassword = process.env.EMAIL_SERVER_PASSWORD || "";
-const baseUrl = process.env.BASE_URL || "http://localhost:3000";
+const baseURL = process.env.BETTER_AUTH_URL || "";
 
 const transporter = nodemailer.createTransport({
   host: emailServerHost,
@@ -24,38 +22,30 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const adapter = await connectToDatabase();
+
 export const auth = betterAuth({
-  baseUrl,
-  secret: process.env.BETTER_AUTH_SECRET as string,
+  baseURL,
   database: mongodbAdapter(adapter.connection.db),
+  user: {
+    changeEmail: {
+      enabled: true
+    },
+    changePassword: {
+      enabled: true
+    },
+    deleteAccount: {
+      enabled: true
+    },
+    resetPassword: {
+      enabled: true
+    }
+  },
   account: {
     accountLinking: {
       enabled: true,
       allowDifferentEmails: true,
       updateUserInfoOnLink: true
-    }
-  },
-  user: {
-    changeEmail: {
-      enabled: true
-    },
-    additionalFields: {
-      authId: {
-        type: "string",
-        required: true,
-        unique: true
-      },
-      role: {
-        type: "string",
-        enum: ["user", "admin"],
-        default: "user"
-      },
-      alternateEmails: {
-        type: "string[]",
-        required: false,
-        default: null,
-        input: true
-      }
     }
   },
   emailVerification: {
@@ -101,14 +91,18 @@ export const auth = betterAuth({
     requireEmailVerification: true
   },
   socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
-    },
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string
+      clientId: process.env.AUTH_GITHUB_ID as string,
+      clientSecret: process.env.AUTH_GITHUB_SECRET as string
     },
+    google: {
+      clientId: process.env.AUTH_GOOGLE_ID as string,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET as string
+    },
+    discord: {
+      clientId: process.env.AUTH_DISCORD_ID as string,
+      clientSecret: process.env.AUTH_DISCORD_SECRET as string
+    }
   },
   plugins: [
     nextCookies(),

@@ -1,6 +1,5 @@
 "use client";
 
-import logo from "@/public/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -20,7 +19,13 @@ export default function Header() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <Image src={logo} alt="Logo" width={40} height={40} priority />
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={40}
+            height={40}
+            priority
+          />
           <span className="font-semibold">AI Notes</span>
         </Link>
 
