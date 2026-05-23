@@ -12,9 +12,7 @@ export async function updateNote({
   content
 }: {
   id: string;
-
   title: string;
-
   content: string;
 }) {
   const session =
@@ -46,7 +44,9 @@ export async function updateNote({
       {
         new: true
       }
-    );
+    )
+    .lean()
+  ;
 
   return JSON.parse(
     JSON.stringify(updated)
