@@ -16,7 +16,7 @@ export async function getNotes() {
 
   await connectToDatabase();
 
-  const notes = await Note.find().sort({
+  const notes: typeof Note[] = await Note.find().sort({
     updatedAt: -1
   });
 
