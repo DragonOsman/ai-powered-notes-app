@@ -48,6 +48,10 @@ export async function updateNote({
     .lean()
   ;
 
+  if (!updated) {
+    throw new Error("Note not found");
+  }
+
   return JSON.parse(
     JSON.stringify(updated)
   );
