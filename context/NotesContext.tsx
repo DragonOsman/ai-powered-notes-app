@@ -1,25 +1,17 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
-
-export interface Note {
-  _id: string;
-  title: string;
-  content: string;
-  summary?: string;
-  tags?: string[];
-  createdAt?: string;
-}
+import { INote } from "../models/Note";
 
 interface NotesContextType {
-  notes: Note[];
-  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
+  notes: INote[];
+  setNotes: React.Dispatch<React.SetStateAction<INote[]>>;
 }
 
 const NotesContext = createContext<NotesContextType | undefined>(undefined);
 
 export function NotesProvider({ children }: { children: React.ReactNode }) {
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<INote[]>([]);
 
   return (
     <NotesContext.Provider value={{ notes, setNotes }}>
