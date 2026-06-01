@@ -39,6 +39,40 @@ export const titleSchema = trimmedString
 
 export const contentSchema = trimmedString.min(2, "Content must be at least 2 characters");
 
+export const tagsResponseSchema = z.object({
+  tags: z
+    .array(
+      z.string()
+        .trim()
+        .min(1)
+        .max(30)
+        .regex(/^[a-z0-9-]+$/,
+          "Tags must be lowercase"
+        )
+    )
+    .max(5, "Maximum 5 tags allowed")
+    .refine(
+      (tags) => new Set(tags).size === tags.length,
+      { message: "Duplicate tags are not allowed" }
+    )
+});
+
+export const todosResponseSchema = z.object({
+  todos: z.array(
+    z.object({
+      task: z.string().trim().min(1)
+    })
+  )
+});
+
+export type TagsResponse = z.infer<
+  typeof tagsResponseSchema
+>;
+
+export type TodosResponse = z.infer<
+  typeof todosResponseSchema
+>;
+
 /* ------------------ */
 /* Helpers            */
 /* ------------------ */
