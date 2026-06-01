@@ -6,18 +6,28 @@ import {
 } from "mongoose";
 
 export interface INote {
+  id: string;
   userId: string;
   title: string;
   content: string;
   summary?: string;
   archived: boolean;
-
+  tags: string[];
+  todos: {
+    task: string;
+  }[];
   createdAt: Date;
   updatedAt: Date;
 }
 
 const NoteSchema = new Schema<INote>(
   {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+      default: () => new Date().getTime().toString()
+    },
     userId: {
       type: String,
       required: true,
@@ -37,6 +47,24 @@ const NoteSchema = new Schema<INote>(
     archived: {
       type: Boolean,
       default: false
+    },
+    tags: {
+      type: [String],
+      default: []
+    },
+    todos: {
+      type: [{
+        task: String
+      }],
+      default: []
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now
     }
   },
   {
