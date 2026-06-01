@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
+import { getNotes } from "@/server/actions/notes/getNotes";
+import NotesList from "@/app/notes/components/NotesList";
 
 export const metadata: Metadata = {
   title: "Notes"
 };
 
-export default function NotesPage() {
+export default async function NotesPage() {
+  const notes = await getNotes();
+
   return (
     <section className="p-6">
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex justify-between">
         <>
           <h1 className="text-4xl font-bold">
             Notes
@@ -38,6 +42,8 @@ export default function NotesPage() {
             here.
           </p>
         </div>
+
+        <NotesList notes={notes} />
       </div>
     </section>
   );
