@@ -23,7 +23,7 @@ export default function NoteEditor({ note }: INoteEditorProps) {
   const handleSave = async () => {
     try {
       setIsSaving(true);
-      await updateNote({ id: note.id, title, content });
+      await updateNote(note.id, title, content);
       router.refresh();
     } catch (error) {
       console.error(`Failed to save note: ${error}`);

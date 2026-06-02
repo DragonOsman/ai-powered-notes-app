@@ -6,15 +6,11 @@ import { connectToDatabase } from "@/lib/db";
 import { Note } from "@/models/Note";
 import { noteSchema } from "@/lib/schemas/note";
 
-export async function updateNote({
-  id,
-  title,
-  content
-}: {
-  id: string;
-  title: string;
-  content: string;
-}) {
+export async function updateNote(
+  id: string,
+  title: string,
+  content: string
+) {
   const session =
     await auth.api.getSession({
       headers: await headers()
