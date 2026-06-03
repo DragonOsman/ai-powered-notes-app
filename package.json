@@ -9,9 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "better-auth": "^1.6.13",
+    "better-auth": "^1.6.14",
     "formik": "^2.4.9",
     "groq-sdk": "^1.2.1",
+    "kysely": "^0.28.17",
     "mongoose": "^9.6.3",
     "next": "^16.2.6",
     "nodemailer": "^8.0.10",
@@ -29,7 +30,7 @@
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.5.0",
-    "eslint": "^10.4.1",
+    "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.7",
     "postcss-nesting": "^14.0.0",
     "tailwindcss": "^4.3.0",
