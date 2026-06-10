@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import { NotesProvider } from "@/context/NotesContext";
+import ThemeProvider from "@/components/providers/ThemeProvider";
 
 export const metadata: Metadata = {
   title: {
@@ -21,10 +22,14 @@ export default function RootLayout({
       lang="en"
     >
       <body className="min-h-screen bg-app text-app">
-        <NotesProvider>
-          <Header />
-          <main className="pt-16">{children}</main>
-        </NotesProvider>
+        <ThemeProvider>
+          <NotesProvider>
+            <Header />
+            <main className="pt-16">
+              {children}
+            </main>
+          </NotesProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

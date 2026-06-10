@@ -6,6 +6,7 @@ import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { authClient } from "@/lib/auth-client";
 import UserButton from "./UserButton";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,13 +62,23 @@ export default function Header() {
                 <li>
                   <button
                     type="button"
-                    className="bg-secondary-500 text-secondary-foreground px-3 py-1.5 rounded hover:bg-secondary-700 transition"
+                    className="
+                      btn-primary
+                      hover:btn-primary-hover
+                      px-3
+                      py-1.5
+                      rounded
+                      transition
+                    "
                   >
                     New Note
                   </button>
                 </li>
                 <li>
                   <UserButton />
+                </li>
+                <li>
+                  <ThemeToggle />
                 </li>
               </>
             ) : (
@@ -79,11 +90,21 @@ export default function Header() {
                 </li>
                 <li>
                   <Link
-                    className="bg-secondary-500 text-secondary-foreground px-3 py-1.5 rounded hover:bg-secondary-700 transition"
+                    className="
+                      btn-primary
+                      hover:btn-primary-hover
+                      px-3
+                      py-1.5
+                      rounded
+                      transition
+                    "
                     href="/auth/signup"
                   >
                     Sign Up
                   </Link>
+                </li>
+                <li>
+                  <ThemeToggle />
                 </li>
               </>
             )}
