@@ -5,32 +5,43 @@
 /* -------------------------------- */
 
 :root {
-  /* backgrounds */
   --color-bg: #f5f7fa;
   --color-bg-secondary: #ffffff;
 
-  /* text */
   --color-text: #2f343f;
   --color-text-muted: #5f6b7a;
 
-  /* borders */
   --color-border: #d7dde5;
 
-  /* primary blue */
-  --color-primary-50: #eaf4fb;
-  --color-primary-100: #d4e9f7;
-  --color-primary-500: #287098;
-  --color-primary-700: #1d5878;
+  --color-primary: #287098;
+  --color-primary-hover: #1d5878;
+  --color-primary-foreground: #ffffff;
 
-  /* secondary gray */
-  --color-secondary-500: #4a5565;
-  --color-secondary-700: #2f343f;
+  --color-secondary: #4a5565;
+  --color-secondary-hover: #2f343f;
+  --color-secondary-foreground: #ffffff;
 
-  /* status/info */
-  --color-info: #4a5565;
-
-  /* danger */
   --color-danger: #dc2626;
+}
+
+.dark {
+  --color-bg: #111827;
+  --color-bg-secondary: #1f2937;
+
+  --color-text: #f3f4f6;
+  --color-text-muted: #cbd5e1;
+
+  --color-border: #374151;
+
+  --color-primary: #4fa0ca;
+  --color-primary-hover: #6ab4d8;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #6b7280;
+  --color-secondary-hover: #9ca3af;
+  --color-secondary-foreground: #ffffff;
+
+  --color-danger: #ef4444;
 }
 
 /* -------------------------------- */
@@ -60,7 +71,7 @@ body {
   background-color: var(--color-bg);
 }
 
-@utility bg-app-secondary {
+@utility bg-surface {
   background-color: var(--color-bg-secondary);
 }
 
@@ -68,7 +79,7 @@ body {
   color: var(--color-text);
 }
 
-@utility text-app-muted {
+@utility text-muted {
   color: var(--color-text-muted);
 }
 
@@ -76,42 +87,20 @@ body {
   border-color: var(--color-border);
 }
 
-@utility bg-primary {
-  background-color: var(--color-primary-500);
+@utility btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
 }
 
-@utility bg-primary-hover {
-  background-color: var(--color-primary-700);
+@utility btn-primary-hover {
+  background-color: var(--color-primary-hover);
 }
 
-@utility text-primary {
-  color: var(--color-primary-500);
+@utility btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-foreground);
 }
 
-@utility bg-secondary {
-  background-color: var(--color-secondary-500);
-}
-
-@utility bg-secondary-hover {
-  background-color: var(--color-secondary-700);
-}
-
-@utility text-info {
-  color: var(--color-info);
-}
-
-@utility link-primary {
-  color: var(--color-primary-500);
-  text-decoration: underline;
-}
-
-@utility card {
-  background-color: var(--color-bg-secondary);
-
-  border: 1px solid var(--color-border);
-
-  border-radius: 0.75rem;
-
-  box-shadow:
-    0 1px 2px rgb(0 0 0 / 0.05);
+@utility btn-secondary-hover {
+  background-color: var(--color-secondary-hover);
 }
