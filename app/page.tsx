@@ -32,14 +32,14 @@ export default function Home() {
       <div className="mt-8 flex gap-4">
         <a
           href="/auth/signup"
-          className="rounded-lg btn-primary hover:btn-primary-hover px-5 py-3 text-white transition"
+          className="rounded-lg btn-primary hover:btn-primary-hover px-5 py-3 transition"
         >
           Get Started
         </a>
 
         <a
           href="/notes"
-          className="rounded-lg btn-secondary hover:btn-secondary-hover px-5 py-3 text-white transition"
+          className="rounded-lg btn-secondary hover:btn-secondary-hover px-5 py-3 transition"
         >
           View Notes
         </a>
