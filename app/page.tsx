@@ -3,7 +3,9 @@ import Image from "next/image";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Home"
+  title: {
+    absolute: "DragonOsman's AI Notes"
+  }
 };
 
 export default function Home() {
@@ -21,7 +23,7 @@ export default function Home() {
         DragonOsman AI Notes App
       </h1>
 
-      <p className="mt-4 max-w-xl text-lg text-app-muted">
+      <p className="mt-4 max-w-xl text-lg text-muted">
         Intelligent note-taking powered by AI,
         Groq, Next.js, MongoDB (for Notes), Neon Serverless PostgreSQL (for user authentication), and Better
         Auth.
