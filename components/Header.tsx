@@ -66,7 +66,7 @@ export default function Header() {
                       btn-primary
                       hover:btn-primary-hover
                       px-3
-                      py-1.5
+                      py-2.5
                       rounded
                       transition
                     "
@@ -94,7 +94,7 @@ export default function Header() {
                       btn-primary
                       hover:btn-primary-hover
                       px-3
-                      py-1.5
+                      py-2.5
                       rounded
                       transition
                     "
