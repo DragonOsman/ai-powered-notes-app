@@ -25,8 +25,9 @@ export default function Home() {
 
       <p className="mt-4 max-w-xl text-lg text-muted">
         Intelligent note-taking powered by AI,
-        Groq, Next.js, MongoDB (for Notes), Neon Serverless PostgreSQL (for user authentication), and Better
-        Auth.
+        Groq, Next.js, MongoDB database (for Notes),
+        Neon Serverless PostgreSQL database (for user authentication),
+        and Better Auth.
       </p>
 
       <div className="mt-8 flex gap-4">

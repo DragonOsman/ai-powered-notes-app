@@ -15,7 +15,7 @@ export default function Header() {
   const isAuthenticated = !!(data?.session && data?.user);
 
   return (
-    <header className="fixed top-0 left-0 w-full h-16 bg-bg border-b border-border z-50">
+    <header className="fixed top-0 left-0 w-full h-16 bg-bg z-50">
       <div className="max-w-7xl mx-auto h-full px-4 flex items-center justify-between">
 
         {/* Logo */}
