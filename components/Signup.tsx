@@ -11,7 +11,7 @@ export default function SignUp() {
   const [customError, setCustomError] = useState<string>("");
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center w-full">
       <div className="w-full max-w-md bg-white px-6 py-12 rounded-xl shadow-sm">
         <h1 className="text-black">Sign Up</h1>
         <Formik
