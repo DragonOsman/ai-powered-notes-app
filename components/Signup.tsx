@@ -1,28 +1,28 @@
-"use client";
-
 import { authClient } from "@/lib/auth-client";
 import { Formik, Form } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useState } from "react";
-import { signInSchema } from "@/lib/schemas/auth";
+import { signUpSchema } from "@/lib/schemas/auth";
 import { FaGoogle, FaGithub, FaEnvelope } from "react-icons/fa";
 
-export default function SignIn() {
+export default function SignUp() {
   const [customError, setCustomError] = useState<string>("");
 
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-md bg-white px-6 py-12 rounded-xl shadow-sm">
-        <h1 className="text-black">Sign In</h1>
+        <h1 className="text-black">Sign Up</h1>
         <Formik
-          initialValues={{ email: "", password: "", rememberMe: false }}
-          validationSchema={toFormikValidationSchema(signInSchema)}
+          initialValues={{ email: "", password: "", confirmPassword: "", name: "" }}
+          validationSchema={toFormikValidationSchema(signUpSchema)}
           onSubmit={async (values, { setSubmitting }) => {
-            const { error } = await authClient.signIn.email({
+            setSubmitting(true);
+            const { error } = await authClient.signUp.email({
               email: values.email,
               password: values.password,
-              rememberMe: values.rememberMe
+              name: values.name
             });
+            setSubmitting(false);
 
             if (error) {
               console.error(error);
@@ -30,8 +30,6 @@ export default function SignIn() {
                 setCustomError(error.message);
               }
             }
-
-            setSubmitting(false);
           }}
         >
           {({ handleSubmit, getFieldProps, touched, errors, isSubmitting, values }) => (
@@ -41,59 +39,72 @@ export default function SignIn() {
                 onSubmit={handleSubmit}
                 method="post"
               >
-                <div className="emailGroup">
-                  <label htmlFor="email">Email:</label>
+                <div className="mb-4">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    {...getFieldProps("name")}
+                    required
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {touched.name && errors.name ? (
+                    <div className="text-red-500 text-sm">{errors.name}</div>
+                  ) : null}
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Email
+                  </label>
                   <input
                     id="email"
                     type="email"
                     {...getFieldProps("email")}
-                    className="border rounded p-2 w-full"
+                    required
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
-                  {touched.email && errors.email && (
-                    <p className="text-red-500 text-sm">{errors.email}</p>
-                  )}
+                  {touched.email && errors.email ? (
+                    <div className="text-red-500 text-sm">{errors.email}</div>
+                  ) : null}
                 </div>
-                <div className="passwordGroup">
-                  <label htmlFor="password">Password:</label>
+                <div className="mb-4">
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                    Password
+                  </label>
                   <input
                     id="password"
                     type="password"
                     {...getFieldProps("password")}
-                    className="border rounded p-2 w-full"
+                    required
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   />
-                  {touched.password && errors.password && (
-                    <p className="text-red-500 text-sm">{errors.password}</p>
-                  )}
-                  <label htmlFor="rememberMe">Remember Me: </label>
-                  <input
-                    id="rememberMe"
-                    className="m-2"
-                   {...getFieldProps("rememberMe")}
-                    type="checkbox"
-                  />
+                  {touched.password && errors.password ? (
+                    <div className="text-red-500 text-sm">{errors.password}</div>
+                  ) : null}
                 </div>
-
+                <div className="mb-4">
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                    Confirm Password
+                  </label>
+                  <input
+                    id="confirmPassword"
+                    type="password"
+                    {...getFieldProps("confirmPassword")}
+                    required
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {touched.confirmPassword && errors.confirmPassword ? (
+                    <div className="text-red-500 text-sm">{errors.confirmPassword}</div>
+                  ) : null}
+                </div>
                 <button
                   type="submit"
-                  title="Sign In"
                   disabled={isSubmitting}
-                  className="bg-blue-600 text-white p-2 rounded disabled:opacity-50 hover:bg-blue-800"
+                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
-                  {isSubmitting ? "Signing in..." : "Sign In"}
+                  Sign Up
                 </button>
-                {}
-                <p className="note">
-                  <a
-                    href="/auth/reset-password-request"
-                    className="link hover:link-hover"
-                    title="reset password"
-                  >
-                    Forgot your password?
-                  </a>
-                </p>
-                <p className="note">
-                  Don't have an account? <a href="/auth/signup" className="link hover:link-hover" title="sign up">Sign up</a>.
-                </p>
                 {customError !== "" && (
                   <p className="text-red-500 text-sm">{customError}</p>
                 )}
