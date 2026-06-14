@@ -54,7 +54,7 @@ model Session {
   ipAddress String?
   userAgent String?
 
-  userId String
+  userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
@@ -65,7 +65,7 @@ model Account {
   id         String @id @default(cuid())
   accountId  String
   providerId String
-  userId     String
+  userId     String @db.Uuid
 
   accessToken           String?
   refreshToken          String?

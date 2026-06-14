@@ -1,30 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Account` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Session` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Verification` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "Account" DROP CONSTRAINT "Account_userId_fkey";
-
--- DropForeignKey
-ALTER TABLE "Session" DROP CONSTRAINT "Session_userId_fkey";
-
--- DropTable
-DROP TABLE "Account";
-
--- DropTable
-DROP TABLE "Session";
-
--- DropTable
-DROP TABLE "User";
-
--- DropTable
-DROP TABLE "Verification";
-
 -- CreateTable
 CREATE TABLE "EmailEvent" (
     "id" TEXT NOT NULL,
@@ -43,13 +16,14 @@ CREATE TABLE "EmailEvent" (
 
 -- CreateTable
 CREATE TABLE "user" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "emailVerified" BOOLEAN NOT NULL DEFAULT false,
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "twoFactorEnabled" BOOLEAN DEFAULT false,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
@@ -63,7 +37,7 @@ CREATE TABLE "session" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "ipAddress" TEXT,
     "userAgent" TEXT,
-    "userId" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "session_pkey" PRIMARY KEY ("id")
 );
@@ -73,7 +47,7 @@ CREATE TABLE "account" (
     "id" TEXT NOT NULL,
     "accountId" TEXT NOT NULL,
     "providerId" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
     "accessToken" TEXT,
     "refreshToken" TEXT,
     "accessTokenExpiresAt" TIMESTAMP(3),
@@ -99,6 +73,17 @@ CREATE TABLE "verification" (
     CONSTRAINT "verification_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "twoFactor" (
+    "id" UUID NOT NULL DEFAULT pg_catalog.gen_random_uuid(),
+    "secret" TEXT NOT NULL,
+    "backupCodes" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
+    "verified" BOOLEAN DEFAULT true,
+
+    CONSTRAINT "twoFactor_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
@@ -114,8 +99,17 @@ CREATE INDEX "account_userId_idx" ON "account"("userId");
 -- CreateIndex
 CREATE INDEX "verification_identifier_idx" ON "verification"("identifier");
 
+-- CreateIndex
+CREATE INDEX "twoFactor_secret_idx" ON "twoFactor"("secret");
+
+-- CreateIndex
+CREATE INDEX "twoFactor_userId_idx" ON "twoFactor"("userId");
+
 -- AddForeignKey
 ALTER TABLE "session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "account" ADD CONSTRAINT "account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "twoFactor" ADD CONSTRAINT "twoFactor_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
