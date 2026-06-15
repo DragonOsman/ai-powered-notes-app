@@ -1,16 +1,56 @@
 import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export const proxy = async (request: NextRequest) => {
-  const session = await auth.api.getSession({ headers: await headers() });
+const PROTECTED_ROUTES = ["/users", "/notes"];
 
-  if (!session) {
-    return NextResponse.redirect(new URL("/auth/signin", request.url));
+function isProtected(pathname: string) {
+  return PROTECTED_ROUTES.some((route) =>
+    pathname.startsWith(route)
+  );
+}
+
+export const proxy = async (request: NextRequest) => {
+  try {
+    const pathname = request.nextUrl.pathname;
+
+    // skip static + auth routes
+    if (
+      pathname.startsWith("/_next") ||
+      pathname.startsWith("/api/auth") ||
+      pathname.startsWith("/auth")
+    ) {
+      return NextResponse.next();
+    }
+
+    const protectedRoute = isProtected(pathname);
+
+    if (!protectedRoute) {
+      return NextResponse.next();
+    }
+
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    });
+
+    // hard block unauthenticated users
+    if (!session?.user) {
+      const loginUrl = new URL("/auth/signin", request.url);
+      loginUrl.searchParams.set("callback", pathname);
+
+      return NextResponse.redirect(loginUrl);
+    }
+
+    return NextResponse.next();
+  } catch (err) {
+    console.error("[PROXY AUTH ERROR]", err);
+
+    // fail closed (important for security)
+    return NextResponse.redirect(
+      new URL("/auth/signin", request.url)
+    );
   }
-  return NextResponse.next();
 };
 
 export const config = {
-  matcher: ["/users/profile", "/users/settings", "/notes/:path*"]
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
