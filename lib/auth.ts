@@ -26,6 +26,8 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+console.log("Before auth config call");
+console.log("AUTH CONFIG LOADED - BUILD 2026-06-15");
 export const auth = betterAuth({
   baseURL,
   database: prismaAdapter(prisma, {
