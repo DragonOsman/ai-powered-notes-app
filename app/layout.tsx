@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import { NotesProvider } from "@/context/NotesContext";
 import ThemeProvider from "@/components/providers/ThemeProvider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -27,6 +28,7 @@ export default function RootLayout({
             <Header />
             <main className="pt-16">
               {children}
+              <Toaster richColors />
             </main>
           </NotesProvider>
         </ThemeProvider>
