@@ -1,3 +1,5 @@
+"use client";
+
 import { Formik, Form, Field } from "formik";
 import { changeEmail } from "@/server/actions/user-settings";
 import { toFormikValidationSchema } from "zod-formik-adapter";

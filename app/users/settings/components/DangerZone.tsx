@@ -1,3 +1,5 @@
+"use client";
+
 import { deleteAccount } from "@/server/actions/user-settings";
 import LogoutOnAllDevicesBtn from "./LogoutOnAllDevicesBtn";
 import { toast } from "sonner";

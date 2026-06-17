@@ -1,3 +1,5 @@
+"use client";
+
 import { Formik, Field, Form } from "formik";
 import { changePassword } from "@/server/actions/user-settings";
 import { toFormikValidationSchema } from "zod-formik-adapter";

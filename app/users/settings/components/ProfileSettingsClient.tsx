@@ -1,3 +1,5 @@
+"use client";
+
 import ChangePasswordForm from "./ChangePasswordForm";
 import ChangeEmailForm from "./ChangeEmailForm";
 import type { User } from "better-auth";
