@@ -14,17 +14,21 @@ datasource db {
 
 model EmailEvent {
   id        String   @id @default(cuid())
-  emailId   String?
-  type      String
+
+  emailId   String   @unique
+
   recipient String?
   subject   String?
-  createdAt DateTime @default(now())
 
-  payload Json
+  status    String
+
+  createdAt DateTime @default(now())
 
   deliveredAt DateTime?
   bouncedAt   DateTime?
   failedAt    DateTime?
+
+  payload Json
 }
 
 model User {
