@@ -7,18 +7,78 @@ export async function POST(req: NextRequest) {
 
     console.log("Webhook received:", body);
 
-    await prisma.emailEvent.create({
-      data: {
-        emailId: body.data?.email_id ?? null,
+    await prisma.emailEvent.upsert({
+      where: {
+        emailId: body.email_id,
+        id: body.email_id
+      },
+      create: {
         type: body.type,
         payload: body,
         recipient: body.data?.to?.[0] ?? null,
-        subject: body.data?.subject
+        subject: body?.data?.subject ?? null
+      },
+      update: {
+        type: body.type,
+        payload: body
       }
     });
 
+    switch (body.type) {
+      case "email.delivered":
+        await prisma.emailEvent.updateMany({
+          where: {
+            emailId:
+              body.data.email_id
+          },
+          data: {
+            deliveredAt: new Date(),
+          },
+        });
+
+        break;
+
+      case "email.sent":
+        await prisma.emailEvent.updateMany({
+          where: {
+            emailId: body.data.email_id
+          },
+          data: {
+            createdAt: new Date()
+          }
+        })
+
+      case "email.bounced":
+        await prisma.emailEvent.updateMany({
+          where: {
+            emailId:
+              body.data.email_id
+          },
+          data: {
+            bouncedAt:
+              new Date(),
+          },
+        });
+
+        break;
+
+      case "email.failed":
+        await prisma.emailEvent.updateMany({
+          where: {
+            emailId:
+              body.data.email_id
+          },
+          data: {
+            failedAt:
+              new Date(),
+          },
+        });
+
+        break;
+    }
+
     return NextResponse.json({
-      success: true,
+      success: true
     });
   } catch (error) {
     console.error(error);
