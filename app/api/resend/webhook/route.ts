@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
         id: body.email_id
       },
       create: {
+        emailId: body.email_id,
         type,
         payload: body,
         recipient: body.data?.to?.[0] ?? null,
