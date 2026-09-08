@@ -206,7 +206,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
     generateAiTitle,
     generateAiSummary,
     generateAiTags,
-    generateAiTodos,
+    generateAiTodos
   }), [
     notes,
     loading,
@@ -218,7 +218,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
     generateAiTitle,
     generateAiSummary,
     generateAiTags,
-    generateAiTodos,
+    generateAiTodos
   ]);
 
   return (
