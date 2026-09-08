@@ -64,10 +64,15 @@ export default function TwoFactorSettings({
       const { data, error } =
         await authClient.twoFactor.enable({
           password: values.password,
+          method: "totp"
         });
 
       if (error) {
         throw new Error(error.message);
+      }
+
+      if (data.method !== "totp") {
+        throw new Error("Expected TOTP setup data.");
       }
 
       setTotpUri(data.totpURI);
