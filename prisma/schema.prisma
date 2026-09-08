@@ -13,22 +13,22 @@ datasource db {
 }
 
 model EmailEvent {
-  id        String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  emailId   String   @unique
+  emailId String @unique
 
   recipient String?
   subject   String?
 
-  type    String
+  type String
 
   createdAt DateTime @default(now())
 
   deliveredAt DateTime?
-  openedAt DateTime?
-  clickedAt DateTime?
-  bouncedAt DateTime?
-  failedAt DateTime?
+  openedAt    DateTime?
+  clickedAt   DateTime?
+  bouncedAt   DateTime?
+  failedAt    DateTime?
 
   payload Json
 }
@@ -106,14 +106,15 @@ model Verification {
 }
 
 model TwoFactor {
-  id          String   @id @default(dbgenerated("pg_catalog.gen_random_uuid()")) @db.Uuid
-  secret      String
-  backupCodes String
-  userId      String   @db.Uuid
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  verified    Boolean? @default(true)
+  id                      String    @id @default(cuid())
+  secret                  String
+  backupCodes             String
+  userId                  String    @db.Uuid
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verified                Boolean   @default(false)
+  failedVerificationCount Int       @default(0)
+  lockedUntil             DateTime?
 
-  @@index([secret])
   @@index([userId])
   @@map("twoFactor")
 }
