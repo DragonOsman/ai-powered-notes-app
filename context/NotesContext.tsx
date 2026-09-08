@@ -84,217 +84,142 @@ interface NotesContextType {
   ) => Promise<ITodo[]>;
 }
 
-const NotesContext =
-  createContext<NotesContextType | null>(
-    null
-  );
+const NotesContext = createContext<NotesContextType | null>(null);
 
 interface NotesProviderProps {
   children: ReactNode;
 }
 
-export function NotesProvider({
-  children,
-}: NotesProviderProps) {
-  const [notes, setNotes] = useState<
-    INote[]
-  >([]);
+export function NotesProvider({ children }: NotesProviderProps) {
+  const [notes, setNotes] = useState<INote[]>([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const refreshNotes =
-    useCallback(async () => {
-      try {
-        setLoading(true);
+  const refreshNotes = useCallback(async () => {
+    try {
+      setLoading(true);
 
-        const data =
-          (await getNotes()) as INote[];
+      const data = (await getNotes()) as INote[];
 
-        setNotes(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    }, []);
+      setNotes(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     void refreshNotes();
   }, [refreshNotes]);
 
-  const createNewNote =
-    useCallback(
-      async (
-        data: CreateNoteData
-      ) => {
-        const note =
-          (await createNote(
-            data
-          )) as INote;
+  const createNewNote = useCallback(async (data: CreateNoteData) => {
+    const note = (await createNote(data)) as INote;
+    setNotes((prevNotes: INote[]) => [
+      note,
+      ...prevNotes,
+    ]);
+    return note;
+  }, []);
 
-        setNotes((prevNotes) => [
-          note,
-          ...prevNotes,
-        ]);
+  const updateExistingNote = useCallback(async (
+    id: string,
+    title: string,
+    content: string
+  ) => {
+    const updated = (await updateNote(id, title, content)) as INote;
+    setNotes((prevNotes: INote[]) => prevNotes.map(
+      (note) => note._id === id
+        ? updated
+        : note
+      ))
+    ;
 
-        return note;
-      },
-      []
-    );
+    return updated;
+  }, []);
 
-  const updateExistingNote =
-    useCallback(
-      async (
-        id: string,
-        title: string,
-        content: string
-      ) => {
-        const updated =
-          (await updateNote(
-            id,
-            title,
-            content
-          )) as INote;
+  const removeNote = useCallback(async (id: string) => {
+    await deleteNote(id);
+    setNotes((prevNotes) => prevNotes.filter(
+      (note) => note._id !== id
+    ));
+  }, []);
 
-        setNotes((prevNotes) =>
-          prevNotes.map((note) =>
-            note._id === id
-              ? updated
-              : note
-          )
-        );
+  const archiveExistingNote = useCallback(async (id: string) => {
+    await archiveNote(id);
 
-        return updated;
-      },
-      []
-    );
+    setNotes((prevNotes) => prevNotes.map((note) =>
+      note._id === id
+        ? {
+          ...note,
+          archived: true,
+        }
+        :
+        note
+    ));
+  }, []);
 
-  const removeNote =
-    useCallback(
-      async (id: string) => {
-        await deleteNote(id);
+  const generateAiTitle = useCallback(async (noteId: string) => {
+    const title = await generateTitle(noteId);
 
-        setNotes((prevNotes) =>
-          prevNotes.filter(
-            (note) =>
-              note._id !== id
-          )
-        );
-      },
-      []
-    );
+    await refreshNotes();
 
-  const archiveExistingNote =
-    useCallback(
-      async (id: string) => {
-        await archiveNote(id);
+    return title;
+  }, [refreshNotes]);
 
-        setNotes((prevNotes) =>
-          prevNotes.map((note) =>
-            note._id === id
-              ? {
-                  ...note,
-                  archived: true,
-                }
-              : note
-          )
-        );
-      },
-      []
-    );
+  const generateAiSummary = useCallback(async (noteId: string) => {
+    const summary = await generateSummary(noteId);
 
-  const generateAiTitle =
-    useCallback(
-      async (noteId: string) => {
-        const title =
-          await generateTitle(
-            noteId
-          );
+    await refreshNotes();
 
-        await refreshNotes();
+    return summary;
+  }, [refreshNotes]);
 
-        return title;
-      },
-      [refreshNotes]
-    );
+  const generateAiTags = useCallback(async (noteId: string) => {
+    const tags = await generateTags(noteId);
 
-  const generateAiSummary =
-    useCallback(
-      async (noteId: string) => {
-        const summary =
-          await generateSummary(
-            noteId
-          );
+    await refreshNotes();
 
-        await refreshNotes();
+    return tags;
+  }, [refreshNotes]);
 
-        return summary;
-      },
-      [refreshNotes]
-    );
+  const generateAiTodos = useCallback(async (noteId: string): Promise<ITodo[]> => {
+    const todos = await generateTodos(noteId);
 
-  const generateAiTags =
-    useCallback(
-      async (noteId: string) => {
-        const tags =
-          await generateTags(
-            noteId
-          );
+    await refreshNotes();
 
-        await refreshNotes();
+    return todos;
+  }, [refreshNotes]);
 
-        return tags;
-      },
-      [refreshNotes]
-    );
+  const value = useMemo(() => ({
+    notes,
+    loading,
 
-  const generateAiTodos = useCallback(
-    async (
-      noteId: string
-    ): Promise<ITodo[]> => {
-      const todos =
-        await generateTodos(noteId);
+    refreshNotes,
 
-      await refreshNotes();
+    createNewNote,
+    updateExistingNote,
 
-      return todos;
-    },
-    [refreshNotes]
-  );
+    removeNote,
+    archiveExistingNote,
 
-  const value = useMemo(
-    () => ({
-      notes,
-      loading,
-
-      refreshNotes,
-
-      createNewNote,
-      updateExistingNote,
-
-      removeNote,
-      archiveExistingNote,
-
-      generateAiTitle,
-      generateAiSummary,
-      generateAiTags,
-      generateAiTodos,
-    }),
-    [
-      notes,
-      loading,
-      refreshNotes,
-      createNewNote,
-      updateExistingNote,
-      removeNote,
-      archiveExistingNote,
-      generateAiTitle,
-      generateAiSummary,
-      generateAiTags,
-      generateAiTodos,
-    ]
-  );
+    generateAiTitle,
+    generateAiSummary,
+    generateAiTags,
+    generateAiTodos,
+  }), [
+    notes,
+    loading,
+    refreshNotes,
+    createNewNote,
+    updateExistingNote,
+    removeNote,
+    archiveExistingNote,
+    generateAiTitle,
+    generateAiSummary,
+    generateAiTags,
+    generateAiTodos,
+  ]);
 
   return (
     <NotesContext.Provider
@@ -306,13 +231,10 @@ export function NotesProvider({
 }
 
 export function useNotes() {
-  const context =
-    useContext(NotesContext);
+  const context = useContext(NotesContext);
 
   if (!context) {
-    throw new Error(
-      "useNotes must be used within a NotesProvider."
-    );
+    throw new Error("useNotes must be used within a NotesProvider.");
   }
 
   return context;
