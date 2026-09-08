@@ -12,7 +12,7 @@ export default function LinkedAccounts() {
       <div className="flex flex-wrap gap-3">
         <button
           onClick={() =>
-            authClient.signIn.social({
+            authClient.linkSocial({
               provider: "google",
             })
           }
@@ -23,7 +23,7 @@ export default function LinkedAccounts() {
 
         <button
           onClick={() =>
-            authClient.signIn.social({
+            authClient.linkSocial({
               provider: "github",
             })
           }
@@ -34,7 +34,7 @@ export default function LinkedAccounts() {
 
         <button
           onClick={() =>
-            authClient.signIn.social({
+            authClient.linkSocial({
               provider: "discord",
             })
           }
