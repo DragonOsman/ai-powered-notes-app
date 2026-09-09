@@ -20,7 +20,7 @@ export default function NotesList({
     <div className="grid gap-4">
       {notes.map(note => (
         <Link
-          key={note.userId}
+          key={note.id}
           href={`/notes/${note.id}`}
           className="card p-4 hover:shadow transition"
         >
