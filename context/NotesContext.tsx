@@ -21,7 +21,7 @@ import { generateSummary } from "@/server/actions/ai/generateSummary";
 import { generateTags } from "@/server/actions/ai/generateTags";
 import { generateTodos } from "@/server/actions/ai/generateTodos";
 
-interface ITodo {
+export interface ITodo {
   task: string;
 }
 
