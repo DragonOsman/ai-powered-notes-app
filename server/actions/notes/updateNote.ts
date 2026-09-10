@@ -20,11 +20,10 @@ export async function updateNote(
     throw new Error("Unauthorized");
   }
 
-  const validated =
-    noteSchema.parse({
-      title,
-      content
-    });
+  const validated = noteSchema.parse({
+    title,
+    content
+  });
 
   await connectToDatabase();
 
