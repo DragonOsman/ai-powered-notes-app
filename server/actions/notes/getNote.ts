@@ -17,7 +17,7 @@ export async function getNote(noteId: string) {
   await connectToDatabase();
 
   const note = await Note.findOne({
-    _id: noteId,
+    id: noteId,
     userId: session.user.id
   });
 
