@@ -106,3 +106,12 @@ body {
 @utility btn-secondary-hover {
   background-color: var(--color-bg);
 }
+
+@utility btn-danger {
+  background-color: var(--color-danger);
+  color: var(--color-primary-foreground);
+}
+
+@utility btn-danger-hover {
+  background-color: var(--color-danger-hover);
+}
