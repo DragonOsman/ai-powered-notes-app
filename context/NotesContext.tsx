@@ -26,16 +26,16 @@ interface ITodo {
 }
 
 export interface INote {
-  _id: string;
+  id: string;
   userId: string;
   title: string;
   content: string;
   summary?: string;
-  tags?: string[];
-  todos?: ITodo[];
-  archived?: boolean;
-  createdAt: string;
-  updatedAt: string;
+  archived: boolean;
+  tags: string[];
+  todos: ITodo[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface CreateNoteData {
@@ -129,7 +129,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
   ) => {
     const updated = (await updateNote(id, title, content)) as INote;
     setNotes((prevNotes: INote[]) => prevNotes.map(
-      (note) => note._id === id
+      (note) => note.id === id
         ? updated
         : note
       ))
@@ -141,7 +141,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
   const removeNote = useCallback(async (id: string) => {
     await deleteNote(id);
     setNotes((prevNotes) => prevNotes.filter(
-      (note) => note._id !== id
+      (note) => note.id !== id
     ));
   }, []);
 
@@ -149,7 +149,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
     await archiveNote(id);
 
     setNotes((prevNotes) => prevNotes.map((note) =>
-      note._id === id
+      note.id === id
         ? {
           ...note,
           archived: true,
