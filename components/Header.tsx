@@ -60,8 +60,7 @@ export default function Header() {
                   </Link>
                 </li>
                 <li>
-                  <button
-                    type="button"
+                  <Link
                     className="
                       btn-primary
                       hover:btn-primary-hover
@@ -70,9 +69,18 @@ export default function Header() {
                       rounded
                       transition
                     "
+                    href="/notes/add-note"
                   >
                     New Note
-                  </button>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="text-text-muted hover:text-text"
+                    href="/notes/update-note"
+                  >
+                    Edit Note
+                  </Link>
                 </li>
                 <li>
                   <UserButton />
