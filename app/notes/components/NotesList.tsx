@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { INote } from "@/models/Note";
+import DeleteNote from "./DeleteNote";
 
 export default function NotesList({
   notes
@@ -11,7 +12,13 @@ export default function NotesList({
   if (notes.length === 0) {
     return (
       <div className="card p-6">
-        No notes yet.
+        <p>No notes yet.</p>
+        <Link
+          href="/notes/add-note"
+          className="btn btn-primary mt-4 inline-block"
+        >
+          Create your first note
+        </Link>
       </div>
     );
   }
@@ -19,18 +26,28 @@ export default function NotesList({
   return (
     <div className="grid gap-4">
       {notes.map(note => (
-        <Link
-          key={note.id}
-          href={`/notes/${note.id}`}
-          className="card p-4 hover:shadow transition"
-        >
-          <h2 className="font-semibold">
-            {note.title}
-          </h2>
-          <p className="m-2 text-app-muted">
-            {note.content.slice(0, 150)}
-          </p>
-        </Link>
+        <div className="card p-4 hover:shadow transition" key={note.id}>
+          <div className="mb-4 flex flex-wrap gap-2">
+            <Link
+              href={`/notes/edit-note/${note.id}`}
+              className="btn btn-secondary btn-secondary-hover"
+            >
+              Edit Note
+            </Link>
+            <Link
+              href={`/notes/read-note/${note.id}`}
+              className="block"
+            >
+              <h2 className="font-semibold">
+                {note.title}
+              </h2>
+              <p className="m-2 text-app-muted">
+                {note.content.slice(0, 150)}
+              </p>
+            </Link>
+            <DeleteNote noteId={note.id} />
+          </div>
+        </div>
       ))}
     </div>
   );

@@ -12,15 +12,13 @@ export default async function NotesPage() {
   return (
     <section className="p-6">
       <div className="mb-8 flex justify-between">
-        <>
-          <h1 className="text-4xl font-bold">
-            Notes
-          </h1>
+        <h1 className="text-4xl font-bold">
+          Notes
+        </h1>
 
-          <p className="mt-2 text-app-muted">
-            Organize your AI-powered notes.
-          </p>
-        </>
+        <p className="mt-2 text-app-muted">
+          Organize your AI-powered notes.
+        </p>
 
         <button
           type="button"
@@ -31,18 +29,6 @@ export default async function NotesPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <div className="card p-5">
-          <h2 className="text-xl font-semibold">
-            Example Note
-          </h2>
-
-          <p className="mt-2 text-app-muted">
-            AI-generated summaries and
-            semantic search will appear
-            here.
-          </p>
-        </div>
-
         <NotesList notes={notes} />
       </div>
     </section>
