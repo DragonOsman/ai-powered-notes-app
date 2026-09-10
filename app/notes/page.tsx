@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { getNotes } from "@/server/actions/notes/getNotes";
 import NotesList from "@/app/notes/components/NotesList";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Notes"
+  title: "Notes",
+  description: "Organize your AI-powered notes."
 };
 
 export default async function NotesPage() {
@@ -20,12 +22,12 @@ export default async function NotesPage() {
           Organize your AI-powered notes.
         </p>
 
-        <button
-          type="button"
-          className="rounded-lg bg-primary px-4 py-2 text-white transition hover:bg-primary-hover"
+        <Link
+          href="/notes/add-note"
+          className="rounded-lg bg-primary px-4 py-2 text-white transition hover:bg-primary-hover inline-block"
         >
-          New Note
-        </button>
+          Add a new note
+        </Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
