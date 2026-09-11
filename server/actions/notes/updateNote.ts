@@ -29,7 +29,7 @@ export async function updateNote(
 
   const updated = await Note.findOneAndUpdate(
       {
-        id,
+        _id:id,
         userId: session.user.id
       },
       {

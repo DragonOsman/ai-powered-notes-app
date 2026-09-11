@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { INote } from "@/models/Note";
+import { INote } from "@/context/NotesContext";
 import DeleteNote from "./DeleteNote";
 
 export default function NotesList({

@@ -27,5 +27,16 @@ export async function createNote(formData: {
     content: validated.content
   });
 
-  return JSON.parse(JSON.stringify(note));
+  return {
+    id: note._id.toString(),
+    userId: note.userId,
+    title: note.title,
+    content: note.content,
+    summary: note.summary,
+    archived: note.archived,
+    tags: note.tags,
+    todos: note.todos,
+    createdAt: note.createdAt,
+    updatedAt: note.updatedAt
+  };
 }

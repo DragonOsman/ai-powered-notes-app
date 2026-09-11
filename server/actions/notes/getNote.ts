@@ -17,7 +17,7 @@ export async function getNote(noteId: string) {
   await connectToDatabase();
 
   const note = await Note.findOne({
-    id: noteId,
+    _id: noteId,
     userId: session.user.id
   });
 
@@ -25,5 +25,16 @@ export async function getNote(noteId: string) {
     return null;
   }
 
-  return JSON.parse(JSON.stringify(note));
+  return {
+    id: note._id.toString(),
+    userId: note.userId,
+    title: note.title,
+    content: note.content,
+    summary: note.summary,
+    archived: note.archived,
+    tags: note.tags,
+    todos: note.todos,
+    createdAt: note.createdAt,
+    updatedAt: note.updatedAt
+  };
 }

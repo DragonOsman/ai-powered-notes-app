@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AIToolbar from "@/app/notes/components/AIToolbar";
 import { updateNote } from "@/server/actions/notes/updateNote";
-import { INote } from "@/models/Note";
+import { INote } from "@/context/NotesContext";
 
 interface Todo {
   task: string;

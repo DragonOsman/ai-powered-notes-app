@@ -22,5 +22,16 @@ export async function getNotes() {
     updatedAt: -1
   });
 
-  return JSON.parse(JSON.stringify(notes));
+  return notes.map((note) => ({
+    id: note._id.toString(),
+    userId: note.userId,
+    title: note.title,
+    content: note.content,
+    summary: note.summary,
+    archived: note.archived,
+    tags: note.tags,
+    todos: note.todos,
+    createdAt: note.createdAt,
+    updatedAt: note.updatedAt
+  }));
 }
