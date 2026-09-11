@@ -6,7 +6,6 @@ import {
 } from "mongoose";
 
 export interface INote {
-  id: string;
   userId: string;
   title: string;
   content: string;
@@ -22,12 +21,6 @@ export interface INote {
 
 const NoteSchema = new Schema<INote>(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-      default: () => new Date().getTime().toString()
-    },
     userId: {
       type: String,
       required: true,
