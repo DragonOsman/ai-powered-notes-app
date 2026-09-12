@@ -1,10 +1,10 @@
 "use client";
 
 import { useTransition } from "react";
-import { generateSummary } from "@/server/actions/ai/generateSummary";
-import { generateTitle } from "@/server/actions/ai/generateTitle";
-import { generateTags } from "@/server/actions/ai/generateTags";
-import { generateTodos } from "@/server/actions/ai/generateTodos";
+import { generateSummary } from "@/server/actions/ai/actions/generateSummary";
+import { generateTitle } from "@/server/actions/ai/actions/generateTitle";
+import { generateTags } from "@/server/actions/ai/actions/generateTags";
+import { generateTodos } from "@/server/actions/ai/actions/generateTodos";
 
 interface IAIToolbarProps {
   noteId: string;

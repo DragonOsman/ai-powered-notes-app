@@ -16,10 +16,10 @@ import { updateNote } from "@/server/actions/notes/updateNote";
 import { deleteNote } from "@/server/actions/notes/deleteNote";
 import { archiveNote } from "@/server/actions/notes/archiveNote";
 
-import { generateTitle } from "@/server/actions/ai/generateTitle";
-import { generateSummary } from "@/server/actions/ai/generateSummary";
-import { generateTags } from "@/server/actions/ai/generateTags";
-import { generateTodos } from "@/server/actions/ai/generateTodos";
+import { generateTitle } from "@/server/actions/ai/actions/generateTitle";
+import { generateSummary } from "@/server/actions/ai/actions/generateSummary";
+import { generateTags } from "@/server/actions/ai/actions/generateTags";
+import { generateTodos } from "@/server/actions/ai/actions/generateTodos";
 
 export interface ITodo {
   task: string;
