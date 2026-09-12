@@ -1,19 +1,21 @@
 "use server";
 
 import { getNotes } from "@/server/actions/notes/getNotes";
-import { Note, INote } from "@/models/Note";
+import { Note } from "@/models/Note";
+import { INote } from "@/context/NotesContext";
 import { connectToDatabase } from "@/lib/db";
 import { safeCompletion } from "@/app/api/ai/safeCompletion";
-import { TITLE_PROMPT } from "@/app/api/ai/prompts";
+import { SUMMARY_PROMPT } from "@/app/api/ai/prompts";
 
-export async function generateTitle(noteId: string) {
+export async function generateSummary(noteId: string) {
   const notes: INote[] = await getNotes();
   const note: INote | undefined = notes.find((n: INote) => n.id === noteId);
 
-  let title = "";
+  let summary = "";
+
   if (note) {
-    title = await safeCompletion({
-      system: TITLE_PROMPT,
+    summary = await safeCompletion({
+      system: SUMMARY_PROMPT,
       user: note.content
     });
   }
@@ -21,8 +23,8 @@ export async function generateTitle(noteId: string) {
 
   await Note.findOneAndUpdate({
     id: noteId,
-    title
+    summary
   });
 
-  return title;
+  return summary;
 }
