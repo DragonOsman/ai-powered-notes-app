@@ -2,15 +2,14 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { connectToDatabase } from "@/lib/db";
-import { Note } from "@/models/Note";
-import { noteSchema } from "@/lib/schemas/note";
+import { INote } from "@/types/note";
+import { updateNoteService } from "@/server/services/notes/updateNote";
 
 export async function updateNote(
   id: string,
   title: string,
   content: string
-) {
+): Promise<INote> {
   const session =
     await auth.api.getSession({
       headers: await headers()
@@ -20,34 +19,10 @@ export async function updateNote(
     throw new Error("Unauthorized");
   }
 
-  const validated = noteSchema.parse({
+  return updateNoteService({
+    userId: session.user.id,
+    id,
     title,
     content
   });
-
-  await connectToDatabase();
-
-  const updated = await Note.findOneAndUpdate(
-      {
-        _id:id,
-        userId: session.user.id
-      },
-      {
-        title: validated.title,
-        content: validated.content
-      },
-      {
-        new: true
-      }
-    )
-    .lean()
-  ;
-
-  if (!updated) {
-    throw new Error("Note not found");
-  }
-
-  return JSON.parse(
-    JSON.stringify(updated)
-  );
 }

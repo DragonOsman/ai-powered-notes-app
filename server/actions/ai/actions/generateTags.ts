@@ -2,7 +2,7 @@
 
 import { getNotes } from "@/server/actions/notes/getNotes";
 import { Note } from "@/models/Note";
-import { INote } from "@/context/NotesContext";
+import { INote } from "@/types/note";
 import { connectToDatabase } from "@/lib/db";
 import { safeCompletion } from "@/app/api/ai/safeCompletion";
 import { TAGS_PROMPT } from "@/app/api/ai/prompts";

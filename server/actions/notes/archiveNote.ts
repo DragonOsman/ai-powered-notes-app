@@ -2,10 +2,10 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { connectToDatabase } from "@/lib/db";
-import { Note } from "@/models/Note";
+import { archiveNoteService } from "@/server/services/notes/archiveNote";
+import type { INote } from "@/types/note";
 
-export async function archiveNote(id: string) {
+export async function archiveNote(id: string): Promise<INote> {
   const session = await auth.api.getSession({
     headers: await headers()
   });
@@ -14,19 +14,8 @@ export async function archiveNote(id: string) {
     throw new Error("Unauthorized");
   }
 
-  await connectToDatabase();
-
-  return await Note.findOneAndUpdate(
-      {
-        _id: id,
-        userId: session.user.id
-      },
-      {
-        archived: true
-      },
-      {
-        new: true
-      }
-    )
-  ;
+  return archiveNoteService({
+    id,
+    userId: session.user.id
+  });
 }

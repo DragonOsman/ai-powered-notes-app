@@ -2,8 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { connectToDatabase } from "@/lib/db";
-import { Note } from "@/models/Note";
+import { deleteNoteService } from "@/server/services/notes/deleteNote";
 
 export async function deleteNote(id: string) {
   const session = await auth.api.getSession({
@@ -14,16 +13,7 @@ export async function deleteNote(id: string) {
     throw new Error("Unauthorized");
   }
 
-  await connectToDatabase();
-
-  const deleted = await Note.findOneAndDelete({
-    _id: id,
-    userId: session.user.id
-  });
-
-  if (!deleted) {
-    throw new Error("Note not found");
-  }
+  await deleteNoteService(session.user.id, id);
 
   return {
     success: true
