@@ -21,22 +21,7 @@ import { generateSummary } from "@/server/actions/ai/actions/generateSummary";
 import { generateTags } from "@/server/actions/ai/actions/generateTags";
 import { generateTodos } from "@/server/actions/ai/actions/generateTodos";
 
-export interface ITodo {
-  task: string;
-}
-
-export interface INote {
-  id: string;
-  userId: string;
-  title: string;
-  content: string;
-  summary?: string;
-  archived: boolean;
-  tags: string[];
-  todos: ITodo[];
-  createdAt: Date;
-  updatedAt: Date;
-}
+import type { INote, ITodo } from "@/types/note";
 
 interface CreateNoteData {
   title: string;

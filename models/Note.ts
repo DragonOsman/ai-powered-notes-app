@@ -5,7 +5,7 @@ import {
   type Model
 } from "mongoose";
 
-export interface INote {
+interface INote {
   userId: string;
   title: string;
   content: string;
@@ -32,10 +32,11 @@ const NoteSchema = new Schema<INote>(
     },
     content: {
       type: String,
-      default: ""
+      required: true
     },
     summary: {
-      type: String
+      type: String,
+      default: ""
     },
     archived: {
       type: Boolean,
@@ -47,7 +48,10 @@ const NoteSchema = new Schema<INote>(
     },
     todos: {
       type: [{
-        task: String
+        task: {
+          type: String,
+          required: true
+        }
       }],
       default: []
     },
