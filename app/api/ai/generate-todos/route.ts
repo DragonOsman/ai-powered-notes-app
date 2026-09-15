@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
-import { generateSummaryService } from "@/server/services/ai/generateSummary";
+import { generateTodosService } from "@/server/services/ai/generateTodos";
 
 const NOT_FOUND_ERROR = 404;
 const UNAUTHORIZED_ERROR = 401;
@@ -30,29 +30,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "noteId is required." }, { status: BAD_REQUEST_ERROR });
     }
 
-    const summary = await generateSummaryService({
+    const todos = await generateTodosService({
       userId: session.user.id,
       noteId: body.noteId
     });
 
-    return NextResponse.json({ summary });
+    return NextResponse.json({ todos });
   } catch (error) {
-    console.error(`Failed to generate summary: ${error}`);
+    console.error(`Failed to generate todos: ${error}`);
 
     const message = error instanceof Error
       ? error.message
-      : "Failed to generate summary"
+      : "Failed to generate todos."
     ;
 
-    return NextResponse.json(
-      {
-        error: message
-      },
-      {
-        status: message === "Note not found"
-          ? NOT_FOUND_ERROR
-          : INTERNAL_SERVER_ERROR
-      }
-    );
+    const status = error === "Note not found."
+      ? NOT_FOUND_ERROR
+      : INTERNAL_SERVER_ERROR
+    ;
+    return NextResponse.json({ error: message }, { status });
   }
 }
