@@ -1,30 +1,21 @@
 "use server";
 
-import { getNotes } from "@/server/actions/notes/getNotes";
-import { Note } from "@/models/Note";
-import { INote } from "@/types/note";
-import { connectToDatabase } from "@/lib/db";
-import { safeCompletion } from "@/app/api/ai/safeCompletion";
-import { SUMMARY_PROMPT } from "@/app/api/ai/prompts";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-export async function generateSummary(noteId: string) {
-  const notes: INote[] = await getNotes();
-  const note: INote | undefined = notes.find((n: INote) => n.id === noteId);
+import { generateSummaryService } from "@/server/services/ai/generateSummary";
 
-  let summary = "";
-
-  if (note) {
-    summary = await safeCompletion({
-      system: SUMMARY_PROMPT,
-      user: note.content
-    });
-  }
-  await connectToDatabase();
-
-  await Note.findOneAndUpdate({
-    id: noteId,
-    summary
+export async function generateSummary(noteId: string): Promise<string> {
+  const session = await auth.api.getSession({
+    headers: await headers()
   });
 
-  return summary;
+  if (!session?.user) {
+    throw new Error("Unauthorized");
+  }
+
+  return generateSummaryService({
+    userId: session.user.id,
+    noteId
+  });
 }

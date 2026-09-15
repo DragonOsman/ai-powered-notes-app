@@ -1,29 +1,21 @@
 "use server";
 
-import { getNotes } from "@/server/actions/notes/getNotes";
-import { Note } from "@/models/Note";
-import {  INote } from "@/types/note";
-import { connectToDatabase } from "@/lib/db";
-import { safeCompletion } from "@/app/api/ai/safeCompletion";
-import { TITLE_PROMPT } from "@/app/api/ai/prompts";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-export async function generateTitle(noteId: string) {
-  const notes: INote[] = await getNotes();
-  const note: INote | undefined = notes.find((n: INote) => n.id === noteId);
+import { generateTitleService } from "@/server/services/ai/generateTitle";
 
-  let title = "";
-  if (note) {
-    title = await safeCompletion({
-      system: TITLE_PROMPT,
-      user: note.content
-    });
-  }
-  await connectToDatabase();
-
-  await Note.findOneAndUpdate({
-    id: noteId,
-    title
+export async function generateTitle(noteId: string): Promise<string> {
+  const session = await auth.api.getSession({
+    headers: await headers()
   });
 
-  return title;
+  if (!session?.user) {
+    throw new Error("Unauthorized");
+  }
+
+  return generateTitleService({
+    userId: session.user.id,
+    noteId
+  });
 }

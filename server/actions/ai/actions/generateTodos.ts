@@ -1,30 +1,20 @@
 "use server";
 
-import { getNotes } from "@/server/actions/notes/getNotes";
-import { Note } from "@/models/Note";
-import { INote } from "@/types/note";
-import { connectToDatabase } from "@/lib/db";
-import { safeCompletion } from "@/app/api/ai/safeCompletion";
-import { TODO_PROMPT } from "@/app/api/ai/prompts";
-import { todosResponseSchema } from "@/lib/validators";
+import { auth } from "@/lib/auth";
+import { generateTodosService } from "@/server/services/ai/generateTodos";
+import { headers } from "next/headers";
 
 export async function generateTodos(noteId: string) {
-  const notes: INote[] = await getNotes();
-  const note: INote | undefined = notes.find((n: INote) => n.id === noteId);
-
-  let todos = "";
-  if (note) {
-    todos = await safeCompletion({
-      system: TODO_PROMPT,
-      user: note.content
-    });
-  }
-  await connectToDatabase();
-
-  const validated = todosResponseSchema.parse(JSON.parse(todos));
-  await Note.findByIdAndUpdate(noteId, {
-    todos: validated.todos
+  const session = await auth.api.getSession({
+    headers: await headers()
   });
 
-  return validated.todos;
+  if (!session?.user) {
+    throw new Error("Unauthorized");
+  }
+
+  return generateTodosService({
+    userId: session.user.id,
+    noteId
+  });
 }
