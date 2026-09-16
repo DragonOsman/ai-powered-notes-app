@@ -10,7 +10,8 @@ import {
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { toast } from "sonner";
 
-import { useNotes, type INote } from "@/context/NotesContext";
+import { useNotes } from "@/context/NotesContext";
+import type { INote } from "@/types/note";
 import { noteSchema } from "@/lib/schemas/note";
 
 interface AddNewNoteFormValues {
@@ -33,7 +34,7 @@ export default function AddNewNote() {
     helpers: FormikHelpers<AddNewNoteFormValues>
   ) => {
     try {
-      const note = await createNewNote({
+      const note: INote = await createNewNote({
         title: values.title.trim(),
         content: values.content,
       });

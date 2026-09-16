@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AIToolbar from "@/app/notes/components/AIToolbar";
 import { updateNote } from "@/server/actions/notes/updateNote";
-import { INote } from "@/context/NotesContext";
+import { INote } from "@/types/note";
 
 interface Todo {
   task: string;
@@ -110,7 +110,7 @@ export default function NoteEditor({ note }: INoteEditorProps) {
           </h2>
 
           <div className="flex flex-wrap gap-2">
-            {note.tags.map((tag) => (
+            {note.tags.map((tag: string) => (
               <span
                 key={tag}
                 className="rounded-full border px-3 py-1"

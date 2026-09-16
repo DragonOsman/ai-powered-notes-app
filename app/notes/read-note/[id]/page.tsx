@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getNote } from "@/server/actions/notes/getNote";
-import { ITodo } from "@/context/NotesContext";
+import { ITodo } from "@/types/note";
 
 interface ReadNotePageProps {
   params: Promise<{
