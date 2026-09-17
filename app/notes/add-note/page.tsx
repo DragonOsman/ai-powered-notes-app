@@ -1,6 +1,3 @@
-import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,15 +5,9 @@ export const metadata: Metadata = {
   description: "Create a new note in your notes app."
 };
 
-import AddNewNote from "../components/AddNewNote";
+import AddNewNote from "@/app/notes/components/AddNewNote";
 
 export default async function NewNotePage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-
-  if (!session?.user) {
-    redirect("/auth/signin");
-  }
-
   return (
     <main className="container mx-auto px-4 py-8">
       <AddNewNote />
