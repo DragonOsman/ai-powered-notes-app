@@ -4,11 +4,13 @@ import Link from "next/link";
 import { INote } from "@/types/note";
 import DeleteNote from "./DeleteNote";
 
+interface NotesListProps {
+  notes: INote[];
+}
+
 export default function NotesList({
   notes
-}: {
-  notes: INote[]
-}) {
+}: NotesListProps) {
   if (notes.length === 0) {
     return (
       <div className="card p-6">
@@ -26,28 +28,29 @@ export default function NotesList({
   return (
     <div className="grid gap-4">
       {notes.map(note => (
-        <div className="card p-4 hover:shadow transition" key={note.id}>
-          <div className="mb-4 flex flex-wrap gap-2">
-            <Link
-              href={`/notes/edit-note/${note.id}`}
-              className="btn btn-secondary btn-secondary-hover"
-            >
-              Edit Note
-            </Link>
-            <Link
-              href={`/notes/read-note/${note.id}`}
-              className="block"
-            >
-              <h2 className="font-semibold">
-                {note.title}
-              </h2>
-              <p className="m-2 text-app-muted">
-                {note.content.slice(0, 150)}
-              </p>
-            </Link>
-            <DeleteNote noteId={note.id} />
-          </div>
-        </div>
+        <article
+          className="card flex flex-col p-4 transition hover:shadow"
+          key={note.id}
+        >
+          <Link
+            href={`/notes/edit-note/${note.id}`}
+            className="btn btn-secondary btn-secondary-hover"
+          >
+            Edit Note
+          </Link>
+          <Link
+            href={`/notes/read-note/${note.id}`}
+            className="block"
+          >
+            <h2 className="font-semibold">
+              {note.title}
+            </h2>
+            <p className="m-2 text-app-muted">
+              {note.content.slice(0, 150)}
+            </p>
+          </Link>
+          <DeleteNote noteId={note.id} />
+        </article>
       ))}
     </div>
   );

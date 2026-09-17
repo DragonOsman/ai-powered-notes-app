@@ -33,7 +33,7 @@ export default function DeleteNote({ noteId }: DeleteNoteProps) {
       toast.error(
         error instanceof Error
           ? error.message
-          : error as string
+          : "Failed to delete note."
       );
     } finally {
       setIsDeleting(false);

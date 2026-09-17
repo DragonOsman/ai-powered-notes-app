@@ -10,7 +10,7 @@ import {
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { toast } from "sonner";
 
-import { useNotes } from "@/context/NotesContext";
+import { createNote } from "@/server/actions/notes/createNote";
 import type { INote } from "@/types/note";
 import { noteSchema } from "@/lib/schemas/note";
 
@@ -22,11 +22,9 @@ interface AddNewNoteFormValues {
 export default function AddNewNote() {
   const router = useRouter();
 
-  const { createNewNote } = useNotes();
-
   const initialValues: AddNewNoteFormValues = {
     title: "",
-    content: "",
+    content: ""
   };
 
   const handleSubmit = async (
@@ -34,14 +32,14 @@ export default function AddNewNote() {
     helpers: FormikHelpers<AddNewNoteFormValues>
   ) => {
     try {
-      const note: INote = await createNewNote({
+      const note: INote = await createNote({
         title: values.title.trim(),
         content: values.content,
       });
 
       toast.success("Note created successfully.");
 
-      router.push(`/notes/${note.id}`);
+      router.push(`/notes/read-note/${note.id}`);
     } catch (error) {
       console.error(error);
 

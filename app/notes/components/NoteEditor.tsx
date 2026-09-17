@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 import AIToolbar from "@/app/notes/components/AIToolbar";
 import { updateNote } from "@/server/actions/notes/updateNote";
+import { noteSchema } from "@/lib/schemas/note";
 import { INote } from "@/types/note";
-
-interface Todo {
-  task: string;
-}
+import { ValidationError } from "better-auth";
 
 interface INoteEditorProps {
   note: INote;
@@ -16,17 +16,44 @@ interface INoteEditorProps {
 
 export default function NoteEditor({ note }: INoteEditorProps) {
   const router = useRouter();
+
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
+    const validation = noteSchema.safeParse({
+      title: title.trim(),
+      content
+    });
+
+    if (!validation.success) {
+      toast.error(
+        validation.error.issues[0]?.message ??
+        "Please enter a valid note."
+      );
+      return;
+    }
+
     try {
       setIsSaving(true);
-      await updateNote(note.id, title, content);
+
+      await updateNote(
+        note.id,
+        validation.data.title,
+        validation.data.content
+      );
+
+      toast.success("Note saved successfully.");
       router.refresh();
     } catch (error) {
       console.error(`Failed to save note: ${error}`);
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to save note."
+      );
     } finally {
       setIsSaving(false);
     }
@@ -71,7 +98,7 @@ export default function NoteEditor({ note }: INoteEditorProps) {
           id="title"
           className="w-full rounded-lg border p-3"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(event) => setTitle(event.target.value)}
         />
       </div>
 
@@ -88,7 +115,7 @@ export default function NoteEditor({ note }: INoteEditorProps) {
           className="w-full rounded-lg border p-3"
           rows={16}
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(event) => setContent(event.target.value)}
         />
       </div>
 
@@ -128,8 +155,8 @@ export default function NoteEditor({ note }: INoteEditorProps) {
             Extracted Todos
           </h2>
 
-          <ul className="space-y">
-            {note.todos.map((todo: Todo, index: number) => (
+          <ul className="space-y-2">
+            {note.todos.map((todo, index: number) => (
               <li
                 key={`${todo.task}-${index}`}
                 className="flex gap-2"

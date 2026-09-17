@@ -5,6 +5,7 @@ import { generateSummary } from "@/server/actions/ai/actions/generateSummary";
 import { generateTitle } from "@/server/actions/ai/actions/generateTitle";
 import { generateTags } from "@/server/actions/ai/actions/generateTags";
 import { generateTodos } from "@/server/actions/ai/actions/generateTodos";
+import { toast } from "sonner";
 
 interface IAIToolbarProps {
   noteId: string;
@@ -15,11 +16,24 @@ export default function AIToolbar({ noteId, onRefresh }: IAIToolbarProps) {
   const [isPending, startTransition] = useTransition();
 
   const runAction = (
-    action: (id: string) => Promise<unknown>
+    action: (id: string) => Promise<unknown>,
+    successMessage: string
   ) => {
     startTransition(async () => {
-      await action(noteId);
-      onRefresh();
+      try {
+        await action(noteId);
+
+        toast(successMessage);
+        onRefresh();
+      } catch (error) {
+        console.error(`AI action failed with error: ${error}`);
+
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "The AI operation failed."
+        )
+      }
     })
   }
 
@@ -30,9 +44,12 @@ export default function AIToolbar({ noteId, onRefresh }: IAIToolbarProps) {
         type="button"
         title="summarize note"
         disabled={isPending}
-        onClick={() => runAction(generateSummary)}
+        onClick={() => runAction(
+          generateSummary,
+          "Summary generated successfully."
+        )}
       >
-        Summarize
+        {isPending ? "Generating summary..." : "Generate Summary"}
       </button>
 
       <button
@@ -40,9 +57,12 @@ export default function AIToolbar({ noteId, onRefresh }: IAIToolbarProps) {
         type="button"
         title="generate title"
         disabled={isPending}
-        onClick={() => runAction(generateTitle)}
+        onClick={() => runAction(
+          generateTitle,
+          "Title generated successfully.."
+        )}
       >
-        Generate Title
+        {isPending ? "Generating title..." : "Generate Title"}
       </button>
 
       <button
@@ -50,9 +70,12 @@ export default function AIToolbar({ noteId, onRefresh }: IAIToolbarProps) {
         type="button"
         title="generate tags"
         disabled={isPending}
-        onClick={() => runAction(generateTags)}
+        onClick={() => runAction(
+          generateTags,
+          "Tags generated successfully."
+        )}
       >
-        Generate Tags
+        {isPending ? "Generating tags..." : "Generate Tags"}
       </button>
 
       <button
@@ -60,9 +83,12 @@ export default function AIToolbar({ noteId, onRefresh }: IAIToolbarProps) {
         type="button"
         title="generate todos"
         disabled={isPending}
-        onClick={() => runAction(generateTodos)}
+        onClick={() => runAction(
+          generateTodos,
+          "Todos generated successfully."
+        )}
       >
-        Generate Todos
+        {isPending ? "Generating todos..." : "Generate Todos"}
       </button>
     </div>
   );
