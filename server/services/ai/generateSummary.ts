@@ -1,6 +1,8 @@
 import Groq from "groq-sdk";
 
 import { getNoteService } from "@/server/services/notes/getNote";
+import { Note } from "@/models/Note";
+import { connectToDatabase } from "@/lib/db";
 
 const grok = new Groq({
   apiKey: process.env.GROK_API_KEY
@@ -44,6 +46,20 @@ export async function generateSummaryService({
   if (!summary) {
     throw new Error("The AI returned an empty summary.");
   }
+
+  await connectToDatabase();
+
+  await Note.updateOne(
+    {
+      _id: noteId,
+      userId
+    },
+    {
+      $set: {
+        summary
+      }
+    }
+  );
 
   return summary;
 }

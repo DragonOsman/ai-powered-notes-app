@@ -2,8 +2,9 @@ import Groq from "groq-sdk";
 
 import { getNoteService } from "@/server/services/notes/getNote";
 import { todosResponseSchema } from "@/lib/validators";
-import { notEqual } from "node:assert";
-import { todo } from "node:test";
+import { Note } from "@/models/Note";
+import { connectToDatabase } from "@/lib/db";
+import { connect } from "node:http2";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
@@ -76,6 +77,20 @@ export async function generateTodosService({
   if (!validated.success) {
     throw new Error("The AI returned invalid todos.");
   }
+
+  await connectToDatabase();
+
+  await Note.updateOne(
+    {
+      _id: noteId,
+      userId
+    },
+    {
+      $set: {
+        todos: validated.data.todos
+      }
+    }
+  )
 
   return validated.data.todos;
 }

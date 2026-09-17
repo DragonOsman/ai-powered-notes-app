@@ -2,7 +2,9 @@ import Groq from "groq-sdk";
 
 import { getNoteService } from "@/server/services/notes/getNote";
 import { tagsResponseSchema } from "@/lib/validators";
-import { triggerAsyncId } from "node:async_hooks";
+import { Note } from "@/models/Note";
+import { connectToDatabase } from "@/lib/db";
+import { connect } from "node:http2";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
@@ -74,6 +76,20 @@ export async function generateTagsService({
   if (!validated.success) {
     throw new Error("The AI returned invalid tags.");
   }
+
+  await connectToDatabase();
+
+  await Note.updateOne(
+    {
+      _id: noteId,
+      userId
+    },
+    {
+      $set: {
+        tags: validated.data.tags
+      }
+    }
+  )
 
   return validated.data.tags;
 }

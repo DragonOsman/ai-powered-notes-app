@@ -1,6 +1,8 @@
 import Groq from "groq-sdk";
 
 import { getNoteService } from "@/server/services/notes/getNote";
+import { Note } from "@/models/Note";
+import { connectToDatabase } from "@/lib/db";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
@@ -44,6 +46,20 @@ export async function generateTitleService({
   if (!title) {
     throw new Error("The AI returned an empty title.");
   }
+
+  await connectToDatabase();
+
+  await Note.updateOne(
+    {
+      _id: noteId,
+      userId
+    },
+    {
+      $set: {
+        title
+      }
+    }
+  );
 
   return title;
 }
