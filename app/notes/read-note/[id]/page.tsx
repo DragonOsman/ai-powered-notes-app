@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getNote } from "@/server/actions/notes/getNote";
-import { ITodo } from "@/types/note";
 
 interface ReadNotePageProps {
   params: Promise<{
@@ -63,7 +62,7 @@ export default async function ReadNotePage({ params }: ReadNotePageProps) {
             </h2>
 
             <div className="mt-3 flex flex-wrap gap-2">
-              {note.tags.map((tag: string) => (
+              {note.tags.map((tag) => (
                 <span
                   key={tag}
                   className="rounded-full border px-3 py-1 text-sm"
@@ -82,7 +81,7 @@ export default async function ReadNotePage({ params }: ReadNotePageProps) {
             </h2>
 
             <ul className="mt-3 space-y-2">
-              {note.todos.map((todo: ITodo, index: number) => (
+              {note.todos.map((todo, index) => (
                 <li
                   key={`${todo.task}-${index}`}
                   className="flex gap-2"

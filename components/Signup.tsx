@@ -6,8 +6,15 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useState } from "react";
 import { signUpSchema } from "@/lib/schemas/auth";
 import { FaGoogle, FaGithub, FaEnvelope } from "react-icons/fa";
+import { useRouter } from "next/router";
 
-export default function SignUp() {
+interface SignUpProps {
+  callbackUrl?: string;
+}
+
+export default function SignUp({ callbackUrl }: SignUpProps) {
+  const router = useRouter();
+
   const [customError, setCustomError] = useState<string>("");
 
   return (
@@ -32,6 +39,7 @@ export default function SignUp() {
                 setCustomError(error.message);
               }
             }
+            router.push(callbackUrl ?? "/users/profile");
           }}
         >
           {({ handleSubmit, getFieldProps, touched, errors, isSubmitting, values }) => (

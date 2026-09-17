@@ -35,7 +35,10 @@ export const proxy = async (request: NextRequest) => {
     // hard block unauthenticated users
     if (!session?.user) {
       const loginUrl = new URL("/auth/signin", request.url);
-      loginUrl.searchParams.set("callback", pathname);
+
+      const callbackUrl = `${request.nextUrl.pathname}` + `${request.nextUrl.search}`;
+
+      loginUrl.searchParams.set("callbackUrl", callbackUrl);
 
       return NextResponse.redirect(loginUrl);
     }
@@ -52,5 +55,10 @@ export const proxy = async (request: NextRequest) => {
 };
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/users/profile",
+    "/users/settings",
+    "/notes/:path*"
+  ],
 };

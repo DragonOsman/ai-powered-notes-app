@@ -5,10 +5,18 @@ export const metadata: Metadata = {
   title: "Sign In"
 };
 
-export default function SignInPage() {
+interface SignInProps {
+  searchParams: Promise<{
+    callbackUrl?: string;
+  }>;
+}
+
+export default async function SignInPage({ searchParams }: SignInProps) {
+  const { callbackUrl } = await searchParams;
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <SignIn />
+      <SignIn callbackUrl={callbackUrl} />
     </div>
   );
 }

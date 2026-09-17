@@ -14,7 +14,7 @@ export default async function NewNotePage() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user) {
-    redirect("/signin");
+    redirect("/auth/signin");
   }
 
   return (
