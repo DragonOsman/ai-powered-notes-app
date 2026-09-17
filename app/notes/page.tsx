@@ -13,14 +13,16 @@ export default async function NotesPage() {
 
   return (
     <section className="p-6">
-      <div className="mb-8 flex justify-between">
-        <h1 className="text-4xl font-bold">
-          Notes
-        </h1>
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-4xl font-bold">
+            Notes
+          </h1>
 
-        <p className="mt-2 text-app-muted">
-          Organize your AI-powered notes.
-        </p>
+          <p className="mt-2 text-app-muted">
+            Organize your AI-powered notes.
+          </p>
+        </div>
 
         <Link
           href="/notes/add-note"
@@ -30,9 +32,7 @@ export default async function NotesPage() {
         </Link>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <NotesList notes={notes} />
-      </div>
+      <NotesList notes={notes} />
     </section>
   );
 }
