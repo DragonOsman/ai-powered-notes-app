@@ -7,6 +7,7 @@ import { useState } from "react";
 import { signUpSchema } from "@/lib/schemas/auth";
 import { FaGoogle, FaGithub, FaEnvelope } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { getSafeCallbackUrl } from "@/lib/safeCallbackUrl";
 
 interface SignUpProps {
   callbackUrl?: string;
@@ -39,7 +40,7 @@ export default function SignUp({ callbackUrl }: SignUpProps) {
                 setCustomError(error.message);
               }
             }
-            router.push(callbackUrl ?? "/users/profile");
+            router.push(getSafeCallbackUrl(callbackUrl) ?? "/users/profile");
           }}
         >
           {({ handleSubmit, getFieldProps, touched, errors, isSubmitting, values }) => (
